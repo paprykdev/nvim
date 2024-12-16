@@ -16,9 +16,11 @@ return {
             -- Recommendation: set to false if you don"t have `tree-sitter` CLI installed locally
             auto_install = true,
 
-            indent = {
-                enable = true
-            },
+            -- Disabled due experimental feature
+
+            -- indent = {
+            --     enable = true
+            -- },
 
             highlight = {
                 -- `false` will disable the whole extension
