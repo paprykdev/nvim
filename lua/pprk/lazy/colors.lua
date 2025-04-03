@@ -1,9 +1,9 @@
 function ColorMyPencils(color)
-	color = color or "rose-pine-moon"
+	color = color or "onedark"
 	vim.cmd.colorscheme(color)
 
-	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+	-- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+	-- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
 
 return {
@@ -12,13 +12,23 @@ return {
     },
 
     {
-        "folke/tokyonight.nvim",
-        lazy = false,
-        opts = {},
+        "olimorris/onedarkpro.nvim",
         config = function()
-            ColorMyPencils()
-        end
+            require("onedarkpro").setup({
+                colors = {
+                    cursorline = "#2a2a2a",
+                },
+                options = {
+                    cursorline = true,
+                    transparency = true,
+                    lualine_transparency = true,
+                    terminal_colors = true,
+                },
+            })
+
+        end,
     },
+
     {
         "ellisonleao/gruvbox.nvim",
         name = "gruvbox",
@@ -45,7 +55,7 @@ return {
                 palette_overrides = {},
                 overrides = {},
                 dim_inactive = false,
-                transparent_mode = false,
+                transparent_mode = true,
             })
         end,
     },
@@ -68,6 +78,7 @@ return {
                     floats = "dark", -- style for floating windows
                 },
             })
+
         end
     },
 
@@ -78,11 +89,14 @@ return {
             require('rose-pine').setup({
                 disable_background = true,
                 styles = {
-                    italic = false,
+                    italic = true,
+                    bold = true,
+                    underline = true,
+                    undercurl = true,
+                    strikethrough = false,
                 },
             })
 
-            ColorMyPencils();
         end
     },
 

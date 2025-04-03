@@ -52,11 +52,16 @@ autocmd('BufEnter', {
         if vim.bo.filetype == "zig" then
             vim.cmd.colorscheme("tokyonight-night")
         else
-            vim.cmd.colorscheme("rose-pine-moon")
+            ColorMyPencils()
         end
     end
 })
 
+vim.diagnostic.config({
+    float = {
+        border = "rounded",
+    },
+})
 
 autocmd('LspAttach', {
     group = ThePrimeagenGroup,

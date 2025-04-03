@@ -1,3 +1,5 @@
+local is_wrapped = false
+
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
@@ -7,6 +9,10 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "J", "mzJ`z")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set("n", "zw", function()
+    is_wrapped = not is_wrapped
+    vim.opt.wrap = is_wrapped
+end)
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n", "<leader>zig", "<cmd>LspRestart<cr>")
@@ -82,7 +88,7 @@ vim.keymap.set("n", "<leader>q", ":w !gcc % -o %:r && konsole --hold -e ./%:r<CR
 -- F6: Java
 -- F7: Python
 -- F8: Go
--- F9: Javascript
+-- F9: Node
 
 vim.keymap.set("n", "<F3>", ":w<CR>:!g++ % -o %:r && konsole --hold -e ./%:r<CR>")
 vim.keymap.set("n", "<F4>", ":w<CR>:!konsole --hold -e cargo run<CR>")
