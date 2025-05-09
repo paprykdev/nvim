@@ -1,5 +1,5 @@
 function ColorMyPencils(color)
-	color = color or "onedark"
+	color = color or "catppuccin-macchiato"
 	vim.cmd.colorscheme(color)
 
 	-- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
@@ -20,12 +20,41 @@ return {
                 },
                 options = {
                     cursorline = true,
-                    transparency = true,
-                    lualine_transparency = true,
+                    -- transparency = true,
+                    -- lualine_transparency = true,
                     terminal_colors = true,
                 },
             })
 
+        end,
+    },
+
+    {
+        "catppuccin/nvim",
+        config = function()
+            require("catppuccin").setup({
+                flavour = "macchiato", -- latte, frappe, macchiato, mocha
+                background = { -- :h background
+                    light = "latte",
+                    dark = "macchiato",
+                },
+                transparent_background = false,
+                term_colors = true,
+                styles = {
+                    comments = { "italic" },
+                    conditionals = { "italic" },
+                    loops = { "bold" },
+                    functions = { "bold" },
+                    keywords = { "bold", "italic" },
+                    strings = { },
+                    variables = {},
+                    numbers = {},
+                    booleans = {},
+                    properties = {},
+                    types = {},
+                    operators = {},
+                },
+            })
         end,
     },
 

@@ -2,6 +2,8 @@ require("pprk.set")
 require("pprk.remap")
 require("pprk.lazy_init")
 
+ColorMyPencils()
+
 -- DO.not
 -- DO NOT INCLUDE THIS
 
@@ -46,16 +48,6 @@ autocmd({"BufWritePre"}, {
     command = [[%s/\s\+$//e]],
 })
 
-autocmd('BufEnter', {
-    group = ThePrimeagenGroup,
-    callback = function()
-        if vim.bo.filetype == "zig" then
-            vim.cmd.colorscheme("tokyonight-night")
-        else
-            ColorMyPencils()
-        end
-    end
-})
 
 vim.diagnostic.config({
     float = {
@@ -63,12 +55,25 @@ vim.diagnostic.config({
     },
 })
 
+local function hover_with_window()
+  local width = math.floor(vim.o.columns)
+  local height = math.floor(vim.o.lines)
+
+  vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+    border = 'rounded',
+    max_width = width,
+    max_height = height,
+  })
+
+  vim.lsp.buf.hover()
+end
+
 autocmd('LspAttach', {
     group = ThePrimeagenGroup,
     callback = function(e)
         local opts = { buffer = e.buf }
         vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
-        vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
+        vim.keymap.set("n", "K", hover_with_window, opts)
         vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
         vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
         vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end, opts)
