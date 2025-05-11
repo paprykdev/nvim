@@ -11,19 +11,38 @@ return {
 
         config = function()
             local ls = require("luasnip")
+            local s = ls.snippet
+            local t = ls.text_node
+            local i = ls.insert_node
+
+
             ls.filetype_extend("javascript", { "jsdoc" })
 
             --- TODO: What is expand?
-            vim.keymap.set({"i"}, "<C-s>e", function() ls.expand() end, {silent = true})
+            vim.keymap.set({"i"}, "<C-s>e", function() ls.expand() end, {silent = true}, { desc = "Expand snippet" })
 
-            vim.keymap.set({"i", "s"}, "<C-s>;", function() ls.jump(1) end, {silent = true})
-            vim.keymap.set({"i", "s"}, "<C-s>,", function() ls.jump(-1) end, {silent = true})
+            vim.keymap.set({"i", "s"}, "<C-s>;", function() ls.jump(1) end, {silent = true}, { desc = "Jump forward" })
+            vim.keymap.set({"i", "s"}, "<C-s>,", function() ls.jump(-1) end, {silent = true}, { desc = "Jump back" })
 
             vim.keymap.set({"i", "s"}, "<C-E>", function()
                 if ls.choice_active() then
                     ls.change_choice(1)
                 end
-            end, {silent = true})
+            end, {silent = true}, { desc = "Change choice" })
+
+            ls.add_snippets("typescriptreact", {
+                s("rfce", {
+                    t({ "'use client';\n\n" }),
+                    t({ "import * as React from 'react';\n\n" }),
+                    t({ "export default function " }),
+                    i(1, "Component"),
+                    t({ "() {\n\t" }),
+                    i(0),
+                    t({ "\n" }),
+                    t({ "}" }),
+                }),
+            })
+
         end,
     }
 }

@@ -1,99 +1,139 @@
 local is_wrapped = false
+local copilot_enabled = false
+local vim = vim
+local keymap = vim.keymap
 
 vim.g.mapleader = " "
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.g.copilot_enabled = copilot_enabled
 
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
-
-vim.keymap.set("n", "J", "mzJ`z")
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
-vim.keymap.set("n", "zw", function()
+local function toggle_wrap()
     is_wrapped = not is_wrapped
     vim.opt.wrap = is_wrapped
-end)
-vim.keymap.set("n", "n", "nzzzv")
-vim.keymap.set("n", "N", "Nzzzv")
-vim.keymap.set("n", "<leader>zig", "<cmd>LspRestart<cr>")
+    if is_wrapped then
+        vim.notify("Line wrapping enabled")
+    else
+        vim.notify("Line wrapping disabled")
+    end
+end
 
-vim.keymap.set("n", "<leader>vwm", function()
+local function toggle_copilot()
+    copilot_enabled = not copilot_enabled
+    vim.g.copilot_enabled = copilot_enabled
+    if copilot_enabled then
+        vim.notify("Copilot enabled")
+    else
+        vim.notify("Copilot disabled")
+    end
+end
+
+local function check_copilot()
+    vim.notify("Copilot is " .. (copilot_enabled and "enabled" or "disabled"))
+end
+
+-- keymap.set("n", "<leader>pv", vim.cmd.Ex)
+
+keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selected lines down" })
+keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selected lines up" })
+
+keymap.set("n", "J", "mzJ`z", { desc = "Join lines and keep cursor in place" })
+keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center cursor" })
+keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up and center cursor" })
+
+-- Toggling
+
+keymap.set("n", "<leader>tw", toggle_wrap, { desc = "Toggle line wrapping" })
+
+keymap.set("n", "<leader>tai", toggle_copilot, { desc = "Toggle Copilot" })
+
+-- Status
+
+keymap.set("n", "<leader>tas", check_copilot, { desc = "Check Copilot status" })
+
+keymap.set("n", "n", "nzzzv", { desc = "Search next and center cursor" })
+keymap.set("n", "N", "Nzzzv", { desc = "Search previous and center cursor" })
+keymap.set("n", "<leader>zig", "<cmd>LspRestart<cr>", { desc = "Restart LSP" })
+
+keymap.set("n", "<leader>vwm", function()
     require("vim-with-me").StartVimWithMe()
-end)
-vim.keymap.set("n", "<leader>svwm", function()
+end, { desc = "Start Vim With Me" })
+keymap.set("n", "<leader>svwm", function()
     require("vim-with-me").StopVimWithMe()
-end)
+end, { desc = "Stop Vim With Me" })
 
 -- greatest remap ever
-vim.keymap.set("x", "<leader>p", [["_dP]])
+keymap.set("x", "<leader>p", [["_dP]], { desc = "Paste without overwriting register" })
 
 -- next greatest remap ever : asbjornHaland
-vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
-vim.keymap.set("n", "<leader>Y", [["+Y]])
+keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank to system clipboard" })
+keymap.set("n", "<leader>Y", [["+Y]], { desc = "Yank to system clipboard" })
 
-vim.keymap.set({ "n", "v" }, "<leader>d", "\"_d")
+keymap.set({ "n", "v" }, "<leader>d", "\"_d", { desc = "Delete without overwriting register" })
 
 -- This is going to get me cancelled
-vim.keymap.set("i", "<C-c>", "<Esc>")
+keymap.set("i", "<C-c>", "<Esc>", { desc = "Exit insert mode" })
 
-vim.keymap.set("n", "Q", "<nop>")
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
+keymap.set("n", "Q", "<nop>", { desc = "Disable Q" })
+keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>", { desc = "Open tmux sessionizer" })
+keymap.set("n", "<leader>f", vim.lsp.buf.format, { desc = "Format current buffer" })
 
-vim.keymap.set("n", "<leader><C-k>", "<cmd>cnext<CR>zz")
-vim.keymap.set("n", "<leader><C-j>", "<cmd>cprev<CR>zz")
-vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
-vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
+keymap.set("n", "<leader><C-k>", "<cmd>cnext<CR>zz", { desc = "Next quickfix item" })
+keymap.set("n", "<leader><C-j>", "<cmd>cprev<CR>zz", { desc = "Previous quickfix item" })
+keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz", { desc = "Next location in quickfix list" })
+keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz", { desc = "Previous location in quickfix list" })
 
-vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
+keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+    { desc = "Replace word under cursor" })
+keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true }, { desc = "Make file executable" })
 
-vim.keymap.set(
+keymap.set(
     "n",
-    "<leader>ee",
+    "<leader>se",
     "oif err != nil {<CR>}<Esc>Oreturn err<Esc>"
+    , { desc = "Insert error handling" }
 )
 
-vim.keymap.set(
+keymap.set(
     "n",
-    "<leader>ea",
+    "<leader>sa",
     "oassert.NoError(err, \"\")<Esc>F\";a"
-)
+    , { desc = "Insert assert error handling" })
 
-vim.keymap.set(
+keymap.set(
     "n",
-    "<leader>ef",
+    "<leader>sf",
     "oif err != nil {<CR>}<Esc>Olog.Fatalf(\"error: %s\\n\", err.Error())<Esc>jj"
+    , { desc = "Insert fatal error handling" }
 )
 
-vim.keymap.set(
+keymap.set(
     "n",
-    "<leader>el",
+    "<leader>sl",
     "oif err != nil {<CR>}<Esc>O.logger.Error(\"error\", \"error\", err)<Esc>F.;i"
+    , { desc = "Insert log error handling" }
 )
 
-vim.keymap.set("n", "<leader>vpp", "<cmd>e ~/.config/nvim/lua/pprk/lazy_init.lua<CR>");
-vim.keymap.set("n", "<leader>mr", "<cmd>CellularAutomaton make_it_rain<CR>");
+keymap.set("n", "<leader>vpp", "<cmd>e ~/.config/nvim/lua/pprk/lazy_init.lua<CR>", { desc = "Edit lazy_init.lua" });
+keymap.set("n", "<leader>mr", "<cmd>CellularAutomaton make_it_rain<CR>", { desc = "Make it rain" });
 
-vim.keymap.set("n", "<leader><leader>", function()
+keymap.set("n", "<leader><leader>", function()
     vim.cmd("so")
-end)
+end, { desc = "Source current file" })
 
-vim.keymap.set("n", "<leader>q", ":w !gcc % -o %:r && konsole --hold -e ./%:r<CR>")
+keymap.set("n", "<leader>q", ":w !gcc % -o %:r && konsole --hold -e ./%:r<CR>", { desc = "Compile and run" })
 
 -- Compile and run keymaps
 -- F3: C++
 -- F4: Rust
--- F5: C
+-- F5: Go
 -- F6: Java
 -- F7: Python
--- F8: Go
+-- F8: C
 -- F9: Node
 
-vim.keymap.set("n", "<F3>", ":w<CR>:!g++ % -o %:r && konsole --hold -e ./%:r<CR>")
-vim.keymap.set("n", "<F4>", ":w<CR>:!konsole --hold -e cargo run<CR>")
-vim.keymap.set("n", "<F5>", ":w<CR>:!gcc % -o %:r && konsole --hold -e ./%:r<CR>")
-vim.keymap.set("n", "<F6>", ":w<CR>:!javac % && konsole --hold -e java %:r<CR>")
-vim.keymap.set("n", "<F7>", ":w<CR>:!python3 %<CR>")
-vim.keymap.set("n", "<F8>", ":w<CR>:!go run %<CR>")
-vim.keymap.set("n", "<F9>", ":w<CR>:!node %<CR>")
+keymap.set("n", "<F3>", ":w<CR>:!g++ % -o %:r && konsole --hold -e ./%:r<CR>", { desc = "Compile and run C++" })
+keymap.set("n", "<F4>", ":w<CR>:!konsole --hold -e cargo run<CR>", { desc = "Compile and run Rust" })
+keymap.set("n", "<F5>", ":w<CR>:!go run %<CR>", { desc = "Compile and run Go" })
+keymap.set("n", "<F6>", ":w<CR>:!javac % && konsole --hold -e java %:r<CR>", { desc = "Compile and run Java" })
+keymap.set("n", "<F7>", ":w<CR>:!python3 %<CR>", { desc = "Compile and run Python" })
+keymap.set("n", "<F8>", ":w<CR>:!gcc % -o %:r && konsole --hold -e ./%:r<CR>", { desc = "Compile and run C" })
+keymap.set("n", "<F9>", ":w<CR>:!node %<CR>", { desc = "Compile and run Node.js" })

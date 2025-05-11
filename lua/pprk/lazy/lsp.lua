@@ -8,10 +8,11 @@ return {
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-path",
         "hrsh7th/cmp-cmdline",
-        "hrsh7th/nvim-cmp",
+        { "hrsh7th/nvim-cmp", event = "InsertEnter" },
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
         "j-hui/fidget.nvim",
+        "onsails/lspkind.nvim",
     },
 
     config = function()
@@ -21,6 +22,7 @@ return {
         })
         local cmp = require('cmp')
         local cmp_lsp = require("cmp_nvim_lsp")
+        local lspkind = require("lspkind")
         local capabilities = vim.tbl_deep_extend(
             "force",
             {},
@@ -87,58 +89,68 @@ return {
             }
         })
 
-        local cmp_select = { behavior = cmp.SelectBehavior.Select }
+        -- local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
         cmp.setup({
+            completion = {
+                completeopt = "menu,menuone,preview,noselect",
+            },
             snippet = {
                 expand = function(args)
                     require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
                 end,
             },
             mapping = cmp.mapping.preset.insert({
-                ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-                ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-                ['<Esc>'] = cmp.mapping.close(),
-                ['<C-q>'] = cmp.mapping.close(),
-                ['<C-Space>'] = cmp.mapping.complete(),
-                ['<CR>'] = cmp.mapping.confirm({ select = true }),
-                ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+                ["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
+                ["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
+                ["<C-h>"] = cmp.mapping.scroll_docs(-4),    -- scroll up in documentation
+                ["<C-l>"] = cmp.mapping.scroll_docs(4),     -- scroll down in documentation
+                ["<C-Space>"] = cmp.mapping.complete(),     -- show completion suggestions
+                ["<Esc>"] = cmp.mapping.abort(),            -- close completion window
+                ["<CR>"] = cmp.mapping.confirm({ select = false }),
+                ["<C-y>"] = cmp.mapping.confirm({ select = true })
             }),
             sources = cmp.config.sources({
-                { name = 'nvim_lsp' },
-                { name = 'luasnip' }, -- For luasnip users.
-            }, {
-                { name = 'buffer' },
+                { name = "nvim_lsp" },
+                { name = "luasnip" }, -- snippets
+                { name = "buffer" },  -- text within current buffer
+                { name = "path" },    -- file system paths
             }),
             window = {
                 completion = {
-                    border = {
-                        { "󱐋", "WarningMsg" },
-                        { "─", "Comment" },
-                        { "╮", "Comment" },
-                        { "│", "Comment" },
-                        { "╯", "Comment" },
-                        { "─", "Comment" },
-                        { "╰", "Comment" },
-                        { "│", "Comment" },
-                    },
+                    -- border = {
+                    --     { "󱐋", "WarningMsg" },
+                    --     { "─", "Comment" },
+                    --     { "╮", "Comment" },
+                    --     { "│", "Comment" },
+                    --     { "╯", "Comment" },
+                    --     { "─", "Comment" },
+                    --     { "╰", "Comment" },
+                    --     { "│", "Comment" },
+                    -- },
                     scrollbar = false,
                     winblend = 0,
                 },
                 documentation = {
-                    border = {
-                        { "󰙎", "DiagnosticHint" },
-                        { "─", "Comment" },
-                        { "╮", "Comment" },
-                        { "│", "Comment" },
-                        { "╯", "Comment" },
-                        { "─", "Comment" },
-                        { "╰", "Comment" },
-                        { "│", "Comment" },
-                    },
+                    -- border = {
+                    --     { "󰙎", "DiagnosticHint" },
+                    --     { "─", "Comment" },
+                    --     { "╮", "Comment" },
+                    --     { "│", "Comment" },
+                    --     { "╯", "Comment" },
+                    --     { "─", "Comment" },
+                    --     { "╰", "Comment" },
+                    --     { "│", "Comment" },
+                    -- },
                     scrollbar = false,
                     winblend = 0,
                 },
+            },
+            formatting = {
+                format = lspkind.cmp_format({
+                    maxwidth = 50,
+                    ellipsis_char = "...",
+                }),
             },
         })
 
