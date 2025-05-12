@@ -111,7 +111,7 @@ return {
                 ["<C-l>"] = cmp.mapping.scroll_docs(4),     -- scroll down in documentation
                 ["<C-Space>"] = cmp.mapping.complete(),     -- show completion suggestions
                 ["<Esc>"] = cmp.mapping.abort(),            -- close completion window
-                ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+                ["<C-y>"] = cmp.mapping.confirm({ select = false }),
                 ["<Tab>"] = cmp.mapping.confirm({ select = true })
             }),
             sources = cmp.config.sources({

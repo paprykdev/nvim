@@ -38,7 +38,7 @@ return {
 
                 color_overrides = {
                     macchiato = {
-                        base = "#001D28",
+                        base = "#101C2E",
                         text = "#B2CAD3",
                         -- mauve = "#6ABED7",
                         overlay2 = "#7D8DA4",
