@@ -1,3 +1,5 @@
+local vim = vim
+
 return {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -35,7 +37,9 @@ return {
             ensure_installed = {
                 "lua_ls",
                 "rust_analyzer",
-                "clangd"
+                "clangd",
+                "gopls",
+                "volar",
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -107,8 +111,8 @@ return {
                 ["<C-l>"] = cmp.mapping.scroll_docs(4),     -- scroll down in documentation
                 ["<C-Space>"] = cmp.mapping.complete(),     -- show completion suggestions
                 ["<Esc>"] = cmp.mapping.abort(),            -- close completion window
-                ["<CR>"] = cmp.mapping.confirm({ select = false }),
-                ["<C-y>"] = cmp.mapping.confirm({ select = true })
+                ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+                ["<Tab>"] = cmp.mapping.confirm({ select = true })
             }),
             sources = cmp.config.sources({
                 { name = "nvim_lsp" },

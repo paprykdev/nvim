@@ -1,3 +1,5 @@
+local vim = vim
+
 return {
     "nvim-telescope/telescope.nvim",
 
@@ -22,8 +24,8 @@ return {
             builtin.grep_string({ search = word })
         end, { desc = "Grep string under cursor (WORD)" })
         vim.keymap.set('n', '<leader>ps', function()
-            builtin.grep_string({ search = vim.fn.input("Grep > ") }, { desc = "Grep string" })
-        end)
+            builtin.grep_string({ search = vim.fn.input("Grep > ") })
+        end, { desc = "Grep string" })
         vim.keymap.set('n', '<leader>vh', builtin.help_tags, {}, { desc = "Find help tags" })
     end
 }
