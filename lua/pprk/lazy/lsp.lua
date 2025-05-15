@@ -18,10 +18,29 @@ return {
     },
 
     config = function()
-        require("conform").setup({
+        local conform = require("conform")
+
+        conform.setup({
             formatters_by_ft = {
+                -- lua = { "stylua" },
+                -- zig = { "zigfmt" },
+                -- go = { "goimports" },
+                -- rust = { "rustfmt" },
+                -- cpp = { "clangformat" },
+                -- c = { "clangformat" },
+                javascript = { "prettier" },
+                typescript = { "prettier" },
+                html = { "prettier" },
+                css = { "prettier" },
+                json = { "prettier" },
+                javascriptreact = { "prettier" },
+                typescriptreact = { "prettier", "ts_ls" },
+                vue = { "prettier" },
+                markdown = { "prettier" },
+                yaml = { "prettier" },
             }
         })
+
         local cmp = require('cmp')
         local cmp_lsp = require("cmp_nvim_lsp")
         local lspkind = require("lspkind")
@@ -171,3 +190,4 @@ return {
         })
     end
 }
+

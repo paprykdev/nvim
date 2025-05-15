@@ -42,10 +42,17 @@ autocmd('TextYankPost', {
     end,
 })
 
-autocmd({"BufWritePre"}, {
+autocmd({ "BufWritePre" }, {
     group = ThePrimeagenGroup,
     pattern = "*",
     command = [[%s/\s\+$//e]],
+})
+
+autocmd({ "BufWritePre" }, {
+    pattern = "*",
+    callback = function(args)
+        require("conform").format({ bufnr = args.buf })
+    end,
 })
 
 
@@ -56,16 +63,16 @@ vim.diagnostic.config({
 })
 
 local function hover_with_window()
-  local width = math.floor(vim.o.columns)
-  local height = math.floor(vim.o.lines)
+    local width = math.floor(vim.o.columns)
+    local height = math.floor(vim.o.lines)
 
-  vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
-    border = 'rounded',
-    max_width = width,
-    max_height = height,
-  })
+    vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+        border = 'rounded',
+        max_width = width,
+        max_height = height,
+    })
 
-  vim.lsp.buf.hover()
+    vim.lsp.buf.hover()
 end
 
 autocmd('LspAttach', {
@@ -73,8 +80,9 @@ autocmd('LspAttach', {
     callback = function(e)
         local opts = { buffer = e.buf }
         vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts, { desc = "Go to definition" })
-        vim.keymap.set("n", "K", hover_with_window, opts, { desc = "Show hover" })
-        vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts, { desc = "Workspace symbol" })
+        vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts, { desc = "Show hover" })
+        vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts,
+            { desc = "Workspace symbol" })
         vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts, { desc = "Show diagnostics" })
         vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end, opts, { desc = "Code action" })
         vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts, { desc = "References" })
