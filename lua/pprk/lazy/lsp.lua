@@ -28,16 +28,26 @@ return {
                 -- rust = { "rustfmt" },
                 -- cpp = { "clangformat" },
                 -- c = { "clangformat" },
-                javascript = { "prettier" },
-                typescript = { "prettier" },
-                html = { "prettier" },
-                css = { "prettier" },
-                json = { "prettier" },
-                javascriptreact = { "prettier" },
-                typescriptreact = { "prettier", "ts_ls" },
-                vue = { "prettier" },
-                markdown = { "prettier" },
-                yaml = { "prettier" },
+                javascript = { "prettierd", "prettier" },
+                typescript = { "prettierd", "prettier" },
+                html = { "prettierd", "prettier" },
+                htmldjango = {},
+                css = { "prettierd", "prettier" },
+                scss = { "prettierd", "prettier" },
+                sass = { "prettierd", "prettier" },
+                json = { "prettierd", "prettier" },
+                javascriptreact = { "prettierd", "prettier" },
+                typescriptreact = { "prettierd", "prettier", "ts_ls" },
+                vue = { "prettierd", "prettier" },
+                markdown = { "prettierd", "prettier" },
+                yaml = { "prettierd", "prettier" },
+                python = { "black" },
+            },
+            formatters = {
+                black = {
+                    stdin = true,
+                    timeout = 10000
+                }
             }
         })
 
@@ -56,9 +66,9 @@ return {
             ensure_installed = {
                 "lua_ls",
                 "rust_analyzer",
+                "ts_ls",
                 "clangd",
                 "gopls",
-                "volar",
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -190,4 +200,3 @@ return {
         })
     end
 }
-
