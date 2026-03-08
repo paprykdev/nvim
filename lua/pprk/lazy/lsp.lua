@@ -72,13 +72,13 @@ return {
             },
             handlers = {
                 function(server_name) -- default handler (optional)
-                    require("lspconfig")[server_name].setup {
+                    vim.lsp.config(server_name).setup {
                         capabilities = capabilities
                     }
                 end,
 
                 zls = function()
-                    local lspconfig = require("lspconfig")
+                    local lspconfig = vim.lsp.config
                     lspconfig.zls.setup({
                         root_dir = lspconfig.util.root_pattern(".git", "build.zig", "zls.json"),
                         settings = {
@@ -93,7 +93,7 @@ return {
                     vim.g.zig_fmt_autosave = 0
                 end,
                 ["rust_analyzer"] = function()
-                    local lspconfig = require("lspconfig")
+                    local lspconfig = vim.lsp.config
                     lspconfig.rust_analyzer.setup {
                         capabilities = capabilities,
                         settings = {
@@ -106,7 +106,7 @@ return {
                     }
                 end,
                 ["lua_ls"] = function()
-                    local lspconfig = require("lspconfig")
+                    local lspconfig = vim.lsp.config
                     lspconfig.lua_ls.setup {
                         capabilities = capabilities,
                         settings = {
