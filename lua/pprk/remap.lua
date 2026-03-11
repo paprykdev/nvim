@@ -30,6 +30,7 @@ local function check_copilot()
     vim.notify("Copilot is " .. (copilot_enabled and "enabled" or "disabled"))
 end
 
+
 keymap.set("n", "<leader>pv", vim.cmd.Ex, {desc = "Dora de explora"})
 
 keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selected lines down" })
@@ -40,16 +41,16 @@ keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center cursor" })
 keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up and center cursor" })
 
 -- Markdown
-keymap.set("n", "<leader>1", "msI# <Esc>`s2l", { desc = "H2 heading" })
-keymap.set("n", "<leader>2", "msI## <Esc>`s3l", { desc = "H2 heading" })
-keymap.set("n", "<leader>3", "msI### <Esc>`s4l", { desc = "H3 heading" })
-keymap.set("n", "<leader>pm", ":MarkdownPreviewToggle<CR>", { desc = "Preview Markdown" })
+-- keymap.set("n", "<leader>1", "msI# <Esc>`s2l", { desc = "H2 heading" })
+-- keymap.set("n", "<leader>2", "msI## <Esc>`s3l", { desc = "H2 heading" })
+-- keymap.set("n", "<leader>3", "msI### <Esc>`s4l", { desc = "H3 heading" })
+-- keymap.set("n", "<leader>pm", ":MarkdownPreviewToggle<CR>", { desc = "Preview Markdown" })
 
 -- Toggling
 
 keymap.set("n", "<leader>tw", toggle_wrap, { desc = "Toggle line wrapping" })
-
 keymap.set("n", "<leader>tai", toggle_copilot, { desc = "Toggle Copilot" })
+keymap.set("n", "<leader>th", "<cmd>CloakToggle<CR>", { desc = "Toggle Cloak" })
 
 -- Status
 
