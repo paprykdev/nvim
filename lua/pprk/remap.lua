@@ -1,5 +1,5 @@
 local is_wrapped = false
-local copilot_enabled = false
+local copilot_enabled = true
 local vim = vim
 local keymap = vim.keymap
 
